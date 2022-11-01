@@ -14,11 +14,18 @@ const socket = io("http://127.0.0.1:3000")
 const App = () => {
 
   const [chatMessage, setChatMessage] = useState("")
+  const [chatMessages, setChatMessages] = useState([])
 
   const submitChatMessage = () => {
     socket.emit("chat message", chatMessage)
     setChatMessage("")
   }
+
+  useEffect(() => {
+    socket.on("chat message", msg => {
+      setChatMessages([...chatMessages, msg])
+    })
+  }, [])
 
   return (
     <SafeAreaView>
@@ -28,6 +35,16 @@ const App = () => {
         onSubmitEditing={() => submitChatMessage()}
         style={styles.textInput}
       />
+
+      {
+        chatMessages?.map(message => {
+          return (
+            <View key={message}>
+              <Text>{message}</Text>
+            </View>
+          )
+        })
+      }
     </SafeAreaView>
   );
 };
