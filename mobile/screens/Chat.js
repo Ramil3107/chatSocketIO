@@ -26,9 +26,8 @@ export const Chat = () => {
   }
 
   useEffect(() => {
-    socket.on("chat message", async (message) => {
-      const msg = await message
-      dispatch(setChatMessages(msg))
+    socket.on("chat message", (message) => {
+      dispatch(setChatMessages(message))
     })
   }, [])
 
